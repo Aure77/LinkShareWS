@@ -63,7 +63,7 @@
 			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 			<property name="url" value="${dburl}" />
 			<property name="username" value="${dbusername}" />
-			<property name="password" value="${$dbpassword}" />
+			<property name="password" value="${dbpassword}" />
 		</bean>
 	</beans>
 </beans>
