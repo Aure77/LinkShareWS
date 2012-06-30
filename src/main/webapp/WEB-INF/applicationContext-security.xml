@@ -38,14 +38,6 @@
     
     <beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
 
-<!--     <bean id="sas" -->
-<!--         class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy"> -->
-<!--         <property name="maximumSessions" value="1" /> -->
-<!--         <constructor-arg name="sessionRegistry" ref="sessionRegistry" /> -->
-<!--     </bean> -->
-    
-<!-- 	<bean id="tokenRepo" class="org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl" /> -->
-
 	<authentication-manager>
 		<authentication-provider user-service-ref="openIdUserService">
 		</authentication-provider>
