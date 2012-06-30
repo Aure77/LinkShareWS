@@ -8,7 +8,7 @@ import javax.xml.bind.JAXBException;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.api.json.JSONJAXBContext;
 
-import fr.prozero.linkshare.model.Link;
+import fr.prozero.linkshare.model.LsLink;
 
 /**
  * Enables the "natural" json generator.
@@ -19,7 +19,7 @@ import fr.prozero.linkshare.model.Link;
 public class CustomJAXBContextResolver implements ContextResolver<JAXBContext> {
 
 	private JAXBContext context;
-	private Class<?>[] types = { Link.class };	
+	private Class<?>[] types = { LsLink.class };	
 	
 	public CustomJAXBContextResolver() throws JAXBException {
 		this.context = new JSONJAXBContext(			

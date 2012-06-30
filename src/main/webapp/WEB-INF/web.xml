@@ -3,19 +3,31 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
 	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-	<display-name>Minichat WS REST</display-name>
+	<display-name>LinkShare Webapp</display-name>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/applicationContext.xml</param-value>
+		<param-value>
+			/WEB-INF/applicationContext.xml,
+			/WEB-INF/applicationContext-security.xml
+		</param-value>
 	</context-param>
+
 	<context-param>
 		<param-name>spring.profiles.active</param-name>
 		<param-value>${spring.profiles}</param-value>
 	</context-param>
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+
+	<!-- Spring Security (Must be called before any filters !!!) -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<servlet>
 		<servlet-name>jersey-serlvet</servlet-name>
@@ -37,12 +49,11 @@
 
 	<servlet-mapping>
 		<servlet-name>jersey-serlvet</servlet-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
-	
-	<servlet-mapping>
-            <servlet-name>default</servlet-name>
-            <url-pattern>/minichat_jquery/*</url-pattern>
-    </servlet-mapping>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 
 </web-app>

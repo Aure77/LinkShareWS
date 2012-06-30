@@ -22,15 +22,15 @@ import fr.prozero.linkshare.model.adapter.JaxbDateAdapter;
 @Table(name = "LS_LINK")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Link {		
+public class LsLink {		
 	
-	public Link(String link, Date createDate, User user) {
+	public LsLink(String link, Date createDate, LsUser user) {
 		this.link = link;
 		this.createDate = createDate;
 		this.user = user;
 	}
 
-	public Link() {
+	public LsLink() {
 	}
 
 	@Id
@@ -47,7 +47,7 @@ public class Link {
 	private Date createDate;
 	
 	@ManyToOne
-    User user;
+    LsUser user;
 	
 	public Long getId() {
 		return id;
@@ -73,11 +73,11 @@ public class Link {
 		this.createDate = createDate;
 	}	
 	
-	public User getUser() {
+	public LsUser getUser() {
 		return user;
 	}
 	
-	public void setUser(User user) {
+	public void setUser(LsUser user) {
 		this.user = user;
 	}
 }

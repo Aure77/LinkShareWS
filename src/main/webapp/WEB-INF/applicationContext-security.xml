@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security" xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+          http://www.springframework.org/schema/tx 
+          http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.1.xsd
+          http://www.springframework.org/schema/context 
+          http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<http pattern="/auth/login*" security="none" />
+	<http pattern="/rest/**" security="none" />
+	<http pattern="/css/**" security="none" />
+	<http pattern="/img/**" security="none" />
+	<http pattern="/js/**" security="none" />
+    <http pattern="/favicon.ico" security="none" />
+
+	<http access-denied-page="/error/403" auto-config="false" disable-url-rewriting="true">
+		<openid-login login-page="/auth/login" default-target-url="/" authentication-failure-url="/auth/login?error=true">
+			<attribute-exchange>
+				<openid-attribute name="email" type="http://axschema.org/contact/email" required="true" count="1" />
+				<openid-attribute name="firstname" type="http://axschema.org/namePerson/first" required="true" />
+				<openid-attribute name="lastname" type="http://axschema.org/namePerson/last" required="true" />
+				<openid-attribute name="fullname" type="http://axschema.org/namePerson" />
+			</attribute-exchange>
+		</openid-login>
+		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
+        <intercept-url pattern="/**" access="ROLE_USER" />
+		<logout invalidate-session="true" logout-success-url="/auth/login" logout-url="/auth/logout" />
+        <session-management invalid-session-url="/auth/login">
+            <concurrency-control max-sessions="1" session-registry-ref="sessionRegistry" expired-url="/auth/login" />
+        </session-management>
+	</http>
+
+	<beans:bean id="openIdUserService" class="fr.prozero.linkshare.service.security.OpenIdUserDetailsService" />
+    
+    <beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+
+<!--     <bean id="sas" -->
+<!--         class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy"> -->
+<!--         <property name="maximumSessions" value="1" /> -->
+<!--         <constructor-arg name="sessionRegistry" ref="sessionRegistry" /> -->
+<!--     </bean> -->
+    
+<!-- 	<bean id="tokenRepo" class="org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl" /> -->
+
+	<authentication-manager>
+		<authentication-provider user-service-ref="openIdUserService">
+		</authentication-provider>
+	</authentication-manager>
+</beans:beans>
