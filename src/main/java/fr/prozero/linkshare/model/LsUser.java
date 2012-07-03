@@ -44,7 +44,7 @@ public class LsUser implements UserDetails {
 	@Column(name = "IS_ENABLED")
 	boolean enabled = true;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER)
     List<LsLink> userLinks = new ArrayList<LsLink>();
 
 	public Long getId() {
