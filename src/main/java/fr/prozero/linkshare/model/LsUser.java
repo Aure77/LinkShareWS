@@ -1,18 +1,14 @@
 package fr.prozero.linkshare.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -20,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "LS_USER")
+@XmlRootElement
 public class LsUser implements UserDetails {
 
 	private static final long serialVersionUID = 2L;
@@ -43,9 +40,6 @@ public class LsUser implements UserDetails {
 	
 	@Column(name = "IS_ENABLED")
 	boolean enabled = true;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER)
-    List<LsLink> userLinks = new ArrayList<LsLink>();
 
 	public Long getId() {
 		return id;
@@ -70,14 +64,6 @@ public class LsUser implements UserDetails {
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
-
-	public List<LsLink> getUserLinks() {
-		return userLinks;
-	}
-
-	public void setUserLinks(List<LsLink> userLinks) {
-		this.userLinks = userLinks;
-	}	
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;

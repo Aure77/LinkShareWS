@@ -14,6 +14,7 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import fr.prozero.linkshare.model.adapter.JaxbDateAdapter;
@@ -47,6 +48,7 @@ public class LsLink {
 	private Date createDate;
 	
 	@ManyToOne
+	@XmlTransient
     LsUser user;
 	
 	public Long getId() {
