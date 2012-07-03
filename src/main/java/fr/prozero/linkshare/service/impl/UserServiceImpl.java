@@ -24,9 +24,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public LsUser getUserByName(String username) {
-		LOGGER.info("Get User by Username : " + username);
-		return userRepo.findUserByName(username);
+	public LsUser getUserByEmail(String email) {
+		LOGGER.info("Get User by Email : " + email);
+		return userRepo.findUserByEmail(email);
 	}
 
 	@Override
@@ -35,4 +35,9 @@ public class UserServiceImpl implements UserService {
 		return userRepo.save(user);
 	}
 
+	@Override
+	public void updateUser(LsUser user) {
+		LOGGER.info("Update User : " + user.getId());
+		userRepo.save(user);		
+	}
 }

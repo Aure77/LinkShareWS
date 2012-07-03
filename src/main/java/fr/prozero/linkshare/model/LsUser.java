@@ -32,13 +32,13 @@ public class LsUser implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column(name = "USERNAME", unique = true, nullable = false)
-    String username;
+	@Column(name = "OPENID_URL")
+    String openIdUrl;
 	
 	@Column(name = "FULLNAME")
     String fullname;
 	
-	@Column(name = "EMAIL")
+	@Column(name = "EMAIL", unique = true, nullable = false)
     String userEmail;
 	
 	@Column(name = "IS_ENABLED")
@@ -53,10 +53,14 @@ public class LsUser implements UserDetails {
 
 	public void setId(Long id) {
 		this.id = id;
+	}	
+
+	public String getOpenIdUrl() {
+		return openIdUrl;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setOpenIdUrl(String openIdUrl) {
+		this.openIdUrl = openIdUrl;
 	}
 
 	public String getUserEmail() {
@@ -94,12 +98,12 @@ public class LsUser implements UserDetails {
 	
 	@Override
 	public String getUsername() {
-		return username;
+		return userEmail;
 	}
 
 	@Override
 	public String getPassword() {
-		return username;
+		return userEmail;
 	}
 
 	@Override

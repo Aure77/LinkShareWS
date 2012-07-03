@@ -37,15 +37,7 @@ public class OpenIdUserDetailsService implements UserDetailsService, Authenticat
         String urlId = token.getIdentityUrl();
 
         if (Strings.isNullOrEmpty(urlId)) {
-            throw new UsernameNotFoundException("UrlId is null");
-        }
-        
-        try {
-            user = userService.getUserByName(urlId);
-        } catch (RuntimeException e) {
-            user = null;
-            // TODO une exception plus explicite dans le catch
-            LOGGER.debug("user not found !", e);
+            throw new UsernameNotFoundException("User OpenID is null");
         }
 
         List<OpenIDAttribute> attributes = token.getAttributes();
@@ -69,24 +61,36 @@ public class OpenIdUserDetailsService implements UserDetailsService, Authenticat
             fullName = firstName + " " + lastName;
         }
         
+        try {
+            user = userService.getUserByEmail(email);
+        } catch (RuntimeException e) {
+            user = null;
+            // TODO une exception plus explicite dans le catch
+            LOGGER.debug("User email not found, create new user !", e);
+        }
+        
         if(null == user) {
             user = new LsUser();
-            user.setUsername(urlId);
+            user.setOpenIdUrl(urlId);
             user.setFullname(fullName);
             user.setUserEmail(email);
             user.setEnabled(true);
             userService.createUser(user);
+        } else {
+            user.setOpenIdUrl(urlId);
+            user.setFullname(fullName);
+            userService.updateUser(user);
         }
         
         return user;
     }
 
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         try {
-            return userService.getUserByName(username);
+            return userService.getUserByEmail(email);
         } catch (RuntimeException e) {
-            LOGGER.debug("user not found", e);
-            throw new UsernameNotFoundException(username + " not found", e);
+            LOGGER.debug("user (" + email + ") not found", e);
+            throw new UsernameNotFoundException("user (" + email + ") not found", e);
         }
     }
 

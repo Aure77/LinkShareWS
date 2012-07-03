@@ -17,10 +17,14 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.common.base.Strings;
+
+import fr.prozero.linkshare.crypto.AESCrypter;
 import fr.prozero.linkshare.model.LsLink;
 import fr.prozero.linkshare.model.LsUser;
 import fr.prozero.linkshare.service.LinkShareService;
 import fr.prozero.linkshare.service.UserService;
+import fr.prozero.linkshare.util.LinkShareSecurity;
 
 @Component
 @Path("/share")
@@ -33,28 +37,41 @@ public class LinkShareWS {
 	private UserService userService;
 
 	@GET
-	@Path("/{userId}")
-	@Produces({ MediaType.APPLICATION_JSON/*, MediaType.APPLICATION_XML*/ })
-	public Response getUserLinks(@PathParam("userId") Long userId) {
-		if(null == userId)
+	@Path("/{userEmailEncrypted}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response getUserLinks(@PathParam("userEmailEncrypted") String userEmailEncrypted) {
+		
+		if(Strings.isNullOrEmpty(userEmailEncrypted))
 			throw new WebApplicationException(Status.BAD_REQUEST);	
-		final LsUser user = userService.getUserById(userId);
+		
+		AESCrypter crypter = new AESCrypter(LinkShareSecurity.INSTANCE.getSecretLsKey());
+		final String userEmail = crypter.decrypt(userEmailEncrypted);
+		
+		if(Strings.isNullOrEmpty(userEmail))
+			throw new WebApplicationException(Status.BAD_REQUEST);	
+		
+		final LsUser user = userService.getUserByEmail(userEmail);
 		if(null == user)
 			throw new WebApplicationException(Status.BAD_REQUEST);
+		
 		final List<LsLink> links = linkshareService.getLastUserLinks(user);
 		final GenericEntity<List<LsLink>> linkList = new GenericEntity<List<LsLink>>(links) {};
 		return Response.ok().entity(linkList).build();
 	}
 
 	@POST
-	@Path("/{userId}")
-	@Produces({ MediaType.APPLICATION_JSON/*, MediaType.APPLICATION_XML*/ })
-	public Response addLink(@PathParam("userId") Long userId, @FormParam("link") String link) {
-		final LsUser user = userService.getUserById(userId);
+	@Path("/{userEmailEncrypted}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response addLink(@PathParam("userEmailEncrypted") String userEmailEncrypted, @FormParam("link") String link) {
+		
+		AESCrypter crypter = new AESCrypter(LinkShareSecurity.INSTANCE.getSecretLsKey());
+		final String userEmail = crypter.decrypt(userEmailEncrypted);
+		
+		final LsUser user = userService.getUserByEmail(userEmail);
 		if(null == user)
 			throw new WebApplicationException(Status.BAD_REQUEST);
-		final LsLink newLink = linkshareService.addLinkToUser(user, link);
 		
+		final LsLink newLink = linkshareService.addLinkToUser(user, link);		
 		return Response.ok().entity(newLink).build();
 	}
 }

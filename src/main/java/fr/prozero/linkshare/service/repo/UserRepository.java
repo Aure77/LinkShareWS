@@ -7,7 +7,7 @@ import fr.prozero.linkshare.model.LsUser;
 
 public interface UserRepository extends JpaRepository<LsUser, Long> {
 
-	@Query("From LsUser u WHERE u.username = ?1")
-	public LsUser findUserByName(String username);
+	@Query("From LsUser u WHERE u.email = ?1")
+	public LsUser findUserByEmail(String username);
 	
 }

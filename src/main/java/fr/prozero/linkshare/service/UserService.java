@@ -6,8 +6,10 @@ public interface UserService {
 	
 	public LsUser getUserById(Long userId);
 
-	public LsUser getUserByName(String username);
+	public LsUser getUserByEmail(String email);
 	
 	public LsUser createUser(LsUser user);
+
+	public void updateUser(LsUser user);
 	
 }

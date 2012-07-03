@@ -10,7 +10,7 @@ public class AESCrypterTest {
 
 	AESCrypter crypter;
 	private static final String TEST_EMAIL = "toto@gmail.com";
-	private static final String TEST_EMAIL_ENCRYPTED = "mV7jlAGFLS8PSN0OovZgJQ==\r\n";
+	private static final String TEST_EMAIL_ENCRYPTED = "mV7jlAGFLS8PSN0OovZgJQ==";
 	
 	@Before
 	public void init() {
